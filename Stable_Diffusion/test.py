@@ -16,30 +16,27 @@ elif (torch.has_mps or torch.backends.mps.is_available()) and ALLOW_MPS:
     DEVICE = "mps"
 print(f"Using device: {DEVICE}")
 
-tokenizer = CLIPTokenizer(r"C:\Users\sayed\Desktop\prsnl\LLMs\GitHub Content\Stable Diffusion\data\vocab.json", merges_file=r"C:\Users\sayed\Desktop\prsnl\LLMs\GitHub Content\Stable Diffusion\data\merges.txt")
-model_file = r"C:\Users\sayed\Desktop\prsnl\LLMs\GitHub Content\Stable Diffusion\data\v1-5-pruned-emaonly.ckpt"
+tokenizer = CLIPTokenizer("vocab.json", merges_file="merges.txt")
+model_file = "inkpunk-diffusion-v1.ckpt"
 models = model_loader.preload_models_from_standard_weights(model_file, DEVICE)
 
 
-
-## TEXT TO IMAGE
-prompt = "A man with sunglasses, wearing comfy hat, looking at camera, highly detailed, ultra sharp, cinematic, 100mm lens, 8k resolution."
-# prompt = "A man stretching on the floor, highly detailed, ultra sharp, cinematic, 100mm lens, 8k resolution."
-uncond_prompt = ""  # Also known as negative prompt
+# TEXT TO IMAGE
+prompt = "A cat with sunglasses, wearing comfy hat, highly detailed, ultra sharp, cinematic, 100mm lens, 8k resolution."
+uncond_prompt = ""  # Optional: negative prompt
 do_cfg = True
 cfg_scale = 8  # min: 1, max: 14
+input_image = None  # No image for Text-to-Image
+strength = 1  # Use 1 as a default value for Text-to-Image
 
-
-
-## IMAGE TO IMAGE
-# Comment to disable image to image
-image_path = r"C:\Users\sayed\Desktop\prsnl\LLMs\GitHub Content\Stable Diffusion\images\me.JPG"
-input_image = Image.open(image_path)
-# Higher values means more noise will be added to the input image, so the result will further from the input image.
-# Lower values means less noise is added to the input image, so output will be closer to the input image.
-strength = 0.9
-
-
+# IMAGE TO IMAGE
+# image_path = "cat.jpg"  # Path to input image
+# prompt = "A cat with sunglasses, wearing comfy hat, highly detailed, ultra sharp, cinematic, 100mm lens, 8k resolution."
+# uncond_prompt = ""  # Optional: negative prompt
+# do_cfg = True
+# cfg_scale = 8  # min: 1, max: 14
+# input_image = Image.open(image_path)
+# strength = 0.8  # Strength to control how much transformation occurs
 
 ## SAMPLER
 sampler = "ddpm"
