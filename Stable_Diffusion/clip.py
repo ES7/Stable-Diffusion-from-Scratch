@@ -1,5 +1,6 @@
 import torch
 from torch import nn
+from torch.nn import functional as F
 from attention import SelfAttention
 
 class CLIPEmbedding(nn.Module):
@@ -13,7 +14,6 @@ class CLIPEmbedding(nn.Module):
     def forward(self, tokens):
         # (Batch_Size, Seq_Len) -> (Batch_Size, Seq_Len, Dim) 
         x = self.token_embedding(tokens)
-        # (Batch_Size, Seq_Len) -> (Batch_Size, Seq_Len, Dim)
         x += self.position_embedding
         
         return x
@@ -40,8 +40,6 @@ class CLIPLayer(nn.Module):
 
         # (Batch_Size, Seq_Len, Dim) -> (Batch_Size, Seq_Len, Dim)
         x = self.layernorm_1(x)
-        
-        # (Batch_Size, Seq_Len, Dim) -> (Batch_Size, Seq_Len, Dim)
         x = self.attention(x, causal_mask=True)
         
         # (Batch_Size, Seq_Len, Dim) + (Batch_Size, Seq_Len, Dim) -> (Batch_Size, Seq_Len, Dim)
@@ -89,7 +87,6 @@ class CLIP(nn.Module):
         for layer in self.layers: 
             # (Batch_Size, Seq_Len, Dim) -> (Batch_Size, Seq_Len, Dim)
             state = layer(state)
-        # (Batch_Size, Seq_Len, Dim) -> (Batch_Size, Seq_Len, Dim)
         output = self.layernorm(state)
         
         return output
