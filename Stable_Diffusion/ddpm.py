@@ -68,10 +68,6 @@ class DDPMSampler:
 
         # 2. compute predicted original sample from predicted noise also called
         # "predicted x_0" of formula (15) from https://arxiv.org/pdf/2006.11239.pdf
-        if model_output.shape[2:] != latents.shape[2:]:
-            # print(f"Resizing model_output to match latents: model_output={model_output.shape}, latents={latents.shape}")
-            model_output = torch.nn.functional.interpolate(model_output, size=latents.shape[2:], mode="nearest")
-
         pred_original_sample = (latents - beta_prod_t ** (0.5) * model_output) / alpha_prod_t ** (0.5)
 
         # 4. Compute coefficients for pred_original_sample x_0 and current sample x_t
